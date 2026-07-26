@@ -1,64 +1,200 @@
-# Digital Heroes - Page Pulse
+# Digital Heroes – Page Pulse
 
-## Overview
-Production-grade URL audit service built with FastAPI.
+A production-ready URL auditing service built with FastAPI for the Digital Heroes Software Development qualification task.
 
 ## Features
+
 - URL validation
-- Configurable caching
-- Rate limiting
-- Structured logging
-- Request IDs
-- Concurrency limits
-- Request timeouts
 - Structured error responses
+- Configurable caching
+- Rate limiting per client
+- Request timeouts
+- Concurrency limits
+- Structured logging with request IDs
+- Automated test suite
+- GitHub Actions CI
+
+---
+
+## Tech Stack
+
+- Python 3.11
+- FastAPI
+- Pydantic
+- Requests
+- BeautifulSoup
+- Pytest
+- GitHub Actions
+
+---
 
 ## Installation
 
-git clone ...
+Clone the repository:
 
+```bash
+git clone https://github.com/DKrishnaKeerthan/digital-heroes-page-pulse.git
+cd digital-heroes-page-pulse
+```
+
+Create a virtual environment:
+
+```bash
+python -m venv venv
+```
+
+Activate it (Windows):
+
+```bash
+venv\Scripts\activate
+```
+
+Install dependencies:
+
+```bash
 pip install -r requirements.txt
+```
 
-## Run
+---
 
+## Run the API
+
+```bash
 uvicorn app.main:app --reload
+```
 
-## API
+The API runs at:
 
-GET /
+```
+http://127.0.0.1:8000
+```
 
-Returns service status.
+---
 
-POST /audit
+# API Contract
 
-Request
+## Health Check
 
+### GET /
+
+Returns the service status.
+
+Example response:
+
+```json
+{
+  "status": "running"
+}
+```
+
+---
+
+## URL Audit
+
+### POST /audit
+
+Request:
+
+```json
 {
   "url": "https://example.com"
 }
+```
 
-Response
+Example Response:
 
+```json
 {
-  ...
+  "title": "...",
+  "description": "...",
+  "seo_score": 82
 }
+```
 
-## Tests
+If the URL is invalid:
 
+```json
+{
+  "error": "Invalid URL"
+}
+```
+
+---
+
+# Testing
+
+Run all tests:
+
+```bash
 pytest
+```
 
-## Environment Variables
+Current status:
 
+- 5 tests passing
+
+---
+
+# Continuous Integration
+
+GitHub Actions automatically:
+
+- Installs dependencies
+- Runs the test suite
+- Validates every push to the main branch
+
+---
+
+# Environment Variables
+
+Create a `.env` file.
+
+Example:
+
+```
 CACHE_TTL=300
+```
 
-RATE_LIMIT=...
+---
 
-## CI
+# Project Structure
 
-GitHub Actions automatically runs tests.
+```
+app/
+    routes/
+    services/
+    models/
+    core/
 
-## Live Demo
+tests/
 
-(Add Render URL after deployment)
+docs/
 
-Built for Digital Heroes Training Task
+.github/
+```
+
+---
+
+# Deployment
+
+Deployment URL:
+
+_To be added after Render deployment._
+
+---
+
+# AI Usage
+
+AI tools (ChatGPT) were used to:
+
+- understand FastAPI best practices
+- improve project structure
+- review architecture
+- help create tests
+- improve documentation
+
+All implementation decisions, debugging, testing, and final code review were completed manually.
+
+---
+
+Built for Digital Heroes Training Task.
