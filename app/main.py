@@ -18,7 +18,7 @@ print(f"Cache TTL: {settings.CACHE_TTL}")
 app = FastAPI()
 logger.info("Logger is working")
 print("FastAPI app created")
-@@app.get("/", response_class=HTMLResponse)
+@app.get("/", response_class=HTMLResponse)
 def root():
     return """
     <!DOCTYPE html>
