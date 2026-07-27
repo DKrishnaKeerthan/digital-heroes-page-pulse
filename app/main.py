@@ -18,6 +18,7 @@ app = FastAPI(
     description="Website auditing API built for the Digital Heroes Training Task.",
     version="1.0.0",
 )
+logger.info("Application started successfully")
 logger.info("Logger is working")
 @app.get("/", response_class=HTMLResponse)
 def root():
@@ -95,6 +96,7 @@ class URLRequest(BaseModel):
 
 @app.post("/audit")
 def audit_url(payload: URLRequest, request: Request):
+    logger.info("audit endpoint reached")
     logger.info("Entered audit_url()")
 
     request_id = str(uuid.uuid4())
@@ -133,7 +135,7 @@ def audit_url(payload: URLRequest, request: Request):
 
     try:
         start_time = time.time()
-
+        time.sleep(10)
         response = requests.get(
             str(payload.url),
             timeout=5,
