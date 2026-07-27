@@ -10,14 +10,15 @@ from pydantic import BaseModel, AnyHttpUrl
 from app.seo import analyze_seo
 from app.performance import performance_rating
 from app.security import analyze_security
-print("main.py is loading...")
 import requests
 import time
 import uuid
-print(f"Cache TTL: {settings.CACHE_TTL}")
-app = FastAPI()
+app = FastAPI(
+    title="Page Pulse API",
+    description="Website auditing API built for the Digital Heroes Training Task.",
+    version="1.0.0",
+)
 logger.info("Logger is working")
-print("FastAPI app created")
 @app.get("/", response_class=HTMLResponse)
 def root():
     return """
@@ -94,12 +95,10 @@ class URLRequest(BaseModel):
 
 @app.post("/audit")
 def audit_url(payload: URLRequest, request: Request):
-    print("audit_url() called")
     logger.info("Entered audit_url()")
 
     request_id = str(uuid.uuid4())
 
-    print("LOGGER REACHED")
     logger.info(f"Request {request_id} | URL={payload.url}")
 
     client_ip = request.client.host if request.client else "unknown"
