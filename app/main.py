@@ -136,7 +136,7 @@ def audit_url(payload: URLRequest, request: Request):
 
     try:
         start_time = time.time()
-        time.sleep(10)
+        time.sleep(5)
         response = requests.get(
             str(payload.url),
             timeout=5,
