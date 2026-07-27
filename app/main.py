@@ -18,7 +18,8 @@ app = FastAPI(
     description="Website auditing API built for the Digital Heroes Training Task.",
     version="1.0.0",
 )
-logger.info("Application started successfully")
+
+logger.info("=== Page Pulse application started ===")
 logger.info("Logger is working")
 @app.get("/", response_class=HTMLResponse)
 def root():
