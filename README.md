@@ -178,7 +178,27 @@ Example
 ```
 
 ---
+## Concurrency Control
 
+The API uses a semaphore to limit the number of requests processed simultaneously.
+
+If the maximum number of concurrent requests has already been reached, the API immediately returns:
+
+HTTP Status: **503 Service Unavailable**
+
+Example response:
+
+```json
+{
+  "detail": {
+    "error": "SERVER_BUSY",
+    "message": "Too many concurrent requests",
+    "request_id": "<uuid>"
+  }
+}
+```
+
+This protects the service from overload during traffic spikes.
 # Caching
 
 The application uses an in-memory cache to avoid repeatedly fetching the same webpage.
@@ -216,7 +236,43 @@ If the maximum concurrent request limit is reached, the API immediately returns:
 This prevents excessive resource consumption under heavy load.
 
 ---
+### Testing Concurrency Limits
 
+Swagger UI sends requests sequentially and cannot be used to test concurrency.
+
+To test manually:
+
+1. Start the server:
+
+```bash
+uvicorn app.main:app --reload --port 8001
+```
+
+2. Open multiple PowerShell windows.
+
+3. Run the following command simultaneously in each window:
+
+```powershell
+Invoke-RestMethod `
+-Method POST `
+-Uri http://127.0.0.1:8001/audit `
+-ContentType "application/json" `
+-Body '{"url":"https://example.com"}'
+```
+
+If the configured semaphore limit is exceeded, additional requests receive:
+
+```
+503 SERVER_BUSY
+```
+
+If you receive:
+
+```
+Unable to connect to the remote server
+```
+
+ensure the FastAPI server is running and use the correct port (`8001` if started with `--port 8001`).
 # Logging
 
 Every request receives a unique request ID.
