@@ -1,3 +1,4 @@
+from fastapi.responses import HTMLResponse
 from app.logger import logger
 from app.concurrency import semaphore
 from fastapi import FastAPI, HTTPException, Request
@@ -17,9 +18,75 @@ print(f"Cache TTL: {settings.CACHE_TTL}")
 app = FastAPI()
 logger.info("Logger is working")
 print("FastAPI app created")
-@app.get("/")
+@@app.get("/", response_class=HTMLResponse)
 def root():
-    return {"status": "running"}
+    return """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <title>Page Pulse API</title>
+        <style>
+            body{
+                font-family:Arial, sans-serif;
+                max-width:800px;
+                margin:50px auto;
+                padding:20px;
+                background:#f7f7f7;
+                color:#333;
+            }
+            h1{
+                color:#2563eb;
+            }
+            .card{
+                background:white;
+                padding:25px;
+                border-radius:10px;
+                box-shadow:0 2px 8px rgba(0,0,0,.08);
+            }
+            footer{
+                margin-top:40px;
+                font-size:14px;
+                color:#666;
+            }
+            a{
+                color:#2563eb;
+                text-decoration:none;
+            }
+        </style>
+    </head>
+
+    <body>
+
+    <div class="card">
+
+        <h1>Page Pulse API</h1>
+
+        <p><strong>Status:</strong> ✅ Running</p>
+
+        <h3>Available Endpoints</h3>
+
+        <ul>
+            <li><a href="/docs">Swagger Documentation</a></li>
+            <li><strong>POST</strong> /audit</li>
+        </ul>
+
+        <p>
+        Page Pulse is a FastAPI-based website auditing service that analyzes
+        webpage metadata, performance, SEO, and basic security information.
+        </p>
+
+        <footer>
+            Built for
+            <a href="https://digitalheroesco.com" target="_blank">
+                Digital Heroes Training Task
+            </a>
+        </footer>
+
+    </div>
+
+    </body>
+    </html>
+    """
 
 class URLRequest(BaseModel):
     url: AnyHttpUrl
@@ -34,16 +101,13 @@ def audit_url(payload: URLRequest, request: Request):
 
     print("LOGGER REACHED")
     logger.info(f"Request {request_id} | URL={payload.url}")
+
     client_ip = request.client.host if request.client else "unknown"
-    print("IP:", client_ip)
-    print("LIMIT:", settings.RATE_LIMIT)
-    print("ALLOW:", allow_request(client_ip, settings.RATE_LIMIT))
+    
 
     allowed = allow_request(client_ip, settings.RATE_LIMIT)
 
-    print("IP:", client_ip)
-    print("LIMIT:", settings.RATE_LIMIT)
-    print("ALLOWED:", allowed)
+    
 
     if not allowed:
         raise HTTPException(
